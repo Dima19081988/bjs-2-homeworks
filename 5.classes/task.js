@@ -13,9 +13,9 @@ class PrintEditionItem {
 
 	set state(newState) {
 		if (newState < 0) {
-			this._state === 0;
+			this._state = 0;
 		} else if (newState > 100) {
-			this._state === 100;
+			this._state = 100;
 		} else {
 			this._state = newState;
 		}
@@ -89,24 +89,38 @@ class Library {
 	}
 }
 
+/**/
+
 class Student {
 	constructor(name) {
 		this.name = name;
 		this.marks = {};
 	}
-	addMark(mark) {
-		if (this.marks.hasOwnProperty(property) === false) {
-			this.marks[property] = [];
+	addMark(mark, subject) {
+		if (mark < 2 || mark > 5) {
+			return;
 		}
-		for (let property in this.marks) {
-			this.marks[property] = [...mark];
-			for (let i = 0; i < mark.length; i++) {
-				if (arr[i] < 2 && arr[i] > 5) {
-					return;
-				} else {
-					this.marks[property].push(mark[i])
-				}
-			}
+		if (!this.marks[subject]) {
+			this.marks[subject] = [];
 		}
+		this.marks[subject].push(mark);
+	}
+	getAverageBySubject(subject) {
+		if (this.marks.hasOwnProperty(subject) === false) {
+			return 0;
+		}
+		return this.marks[subject].reduce((acc, ind) => acc + ind, 0) / this.marks[subject].length;
+	}
+
+	getAverage() {
+		if (Object.keys(this.marks).length === 0) {
+			return 0;
+		};
+		let subjects = Object.keys(this.marks);
+		let averageMark = 0;
+		for (let subject of subjects) {
+			averageMark += this.getAverageBySubject(subject);
+		}
+		return averageMark / subjects.length;
 	}
 }
